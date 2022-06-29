@@ -1,0 +1,93 @@
+﻿<Window x:Class="Fractals.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:hw="http://schemas.hpod9.com/haley/wpf" 
+        xmlns:hm="http://schemas.hpod9.com/haley/mvvm"
+        xmlns:local="clr-namespace:Fractals"
+        mc:Ignorable="d"
+        Title="Фракталы" Height="450" Width="800" SizeChanged="Window_SizeChanged" Loaded="Window_Loaded">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Menu Panel.ZIndex="1" Grid.Row="0">
+            <MenuItem Header="Файл">
+                <MenuItem x:Name="SaveAsImage" Header="Сохранить как изображение" Click="SaveAsPng_Click"/>
+            </MenuItem>
+        </Menu>
+
+        <WrapPanel Orientation="Horizontal" Panel.ZIndex="1" Grid.Row="1" Background="White" HorizontalAlignment="Stretch">
+            <ComboBox x:Name="fractalName" Height="20" Width="170" Margin="5" SelectionChanged="fractalName_SelectionChanged">
+                <ComboBoxItem Name="Tree" Content="Фрактальное дерево"/>
+                <ComboBoxItem Name="Curve" Content="Кривая Коха"/>
+                <ComboBoxItem Name="Carpet" Content="Ковер Серпинского"/>
+                <ComboBoxItem Name="Traingle" Content="Треугольник Серпинского"/>
+                <ComboBoxItem Name="Set" Content="Множество Кантора"/>
+            </ComboBox>
+
+            <Label Content="Глубина прорисовки:" Height="20" Padding="0" Margin="5"/>
+            <Border x:Name="borderTextDepth" BorderThickness="0" Height="20" Padding="0" Margin="0 5 0 5">
+                <TextBox x:Name="depthFractal" Height="20" Width="50" PreviewTextInput="depthFractal_PreviewTextInput" TextChanged="depthFractal_TextChanged"/>
+            </Border>
+
+            <Label x:Name="lengthLabel" Content="Длина:" Margin="5" Padding="0" Visibility="Collapsed"/>
+            <Border x:Name="borderTreeLen" BorderThickness="0" Height="20" Padding="0" Margin="0 5 0 5" Visibility="Collapsed">
+                <TextBox x:Name="lengthTree" Height="20" Width="50" TextChanged="lengthTree_TextChanged" PreviewTextInput="TreeProperties_PreviewTextInput"/>
+            </Border>
+            
+            <Label x:Name="angleLabelLeft" Content="Угл левого:" Margin="5" Padding="0" Visibility="Collapsed"/>
+            <Border x:Name="borderTreeAngleLeft" BorderThickness="0" Height="20" Padding="0" Margin="0 5 0 5" Visibility="Collapsed">
+                <TextBox x:Name="angleTreeLeft" Height="20" Width="50" TextChanged="angleTreeLeft_TextChanged" PreviewTextInput="TreeProperties_PreviewTextInput"/>
+            </Border>
+
+            <Label x:Name="angleLabelRight" Content="Угл правого:" Margin="5" Padding="0" Visibility="Collapsed"/>
+            <Border x:Name="borderTreeAngleRight" BorderThickness="0" Height="20" Padding="0" Margin="0 5 0 5" Visibility="Collapsed">
+                <TextBox x:Name="angleTreeRight" Height="20" Width="50" TextChanged="angleTreeRight_TextChanged" PreviewTextInput="TreeProperties_PreviewTextInput"/>
+            </Border>
+
+            <Label x:Name="ratioLabel" Content="Коэф. соот. длин:" Margin="5" Padding="0" Visibility="Collapsed"/>
+            <Label x:Name="ratioSetLabel" Content="Соотношение между отрезками:" Margin="5" Padding="0" Visibility="Collapsed"/>
+            <Border x:Name="borderTreeRatio" BorderThickness="0" Height="20" Padding="0" Margin="0 5 0 5" Visibility="Collapsed">
+                <TextBox x:Name="ratioTree" Height="20" Width="50" TextChanged="ratioTree_TextChanged"/>
+            </Border>
+            
+            <Label x:Name="setLengthLabel" Content="Растояние между отрезками:" Margin="5" Padding="0" Visibility="Collapsed"/>
+            <Border x:Name="borderSetLength" BorderThickness="0" Height="20" Padding="0" Margin="0 5 0 5" Visibility="Collapsed">
+                <TextBox x:Name="lengthSet" Height="20" Width="50" TextChanged="lengthSet_TextChanged" PreviewTextInput="lengthSet_PreviewTextInput"/>
+            </Border>
+            
+            
+            <hw:ColorPickerButton x:Name="startColorPicker" Content="Начальный цвет" Margin="5 0 5 0"/>
+            <hw:ColorPickerButton x:Name="endColorPicker" Content="Конечный цвет"  Margin="5 0 5 0"/>
+            <hw:ColorPickerButton x:Name="backCarpetColorPicker" Content="Цвет начального квадрата"  Margin="5 0 5 0" Visibility="Collapsed"/>
+
+            <hw:ColorPickerButton x:Name="backColorPicker" Content="Фон"  Margin="5 0 5 0"/>
+            
+        </WrapPanel>
+        <Button Panel.ZIndex="1" Grid.Row ="2" x:Name="paintButton" Margin="15 0 15 15" Width="85" Content="Нарисовать" HorizontalAlignment="Right" VerticalAlignment="Bottom"/>
+        
+        <Slider Grid.Row="2" Panel.ZIndex="2" Margin="10 5 0 15" Orientation="Vertical" 
+           HorizontalAlignment="Left" Minimum="1" Maximum="100" x:Name="slider"/>
+        
+        <ScrollViewer Name="scrollViewer" Panel.ZIndex="0" Grid.Row="2" 
+              VerticalScrollBarVisibility="Hidden" 
+              HorizontalScrollBarVisibility="Hidden"
+              IsEnabled="True">
+            <Canvas Panel.ZIndex="0" x:Name="mainCanvas" Width="{Binding ElementName=scrollViewer, Path=ActualWidth}" 
+                        Height="{Binding ElementName=scrollViewer, Path=ActualHeight}" Background="{Binding ElementName=backColorPicker, Path=SelectedBrush}">
+                <Canvas.LayoutTransform>
+                    <TransformGroup>
+                        <ScaleTransform x:Name="scaleTransform"/>
+                    </TransformGroup>
+                </Canvas.LayoutTransform>
+            </Canvas>
+        </ScrollViewer>
+        
+        
+    </Grid>
+</Window>
